@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formato de Recolección de Datos Macroeconómicos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F4F9; /* Light Gray */
+            color: #0A2342; /* Dark Blue */
+        }
+        .table-container {
+            overflow-x: auto; /* Enables horizontal scrolling on small screens */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling for touch devices */
+        }
+        table {
+            min-width: 800px; /* Adjusted min-width for single country view */
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #E0E0E0; /* Light Gray Border */
+        }
+        th {
+            background-color: #0A2342; /* Dark Blue */
+            color: #FFFFFF; /* White */
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        tr:nth-child(even) {
+            background-color: #F9FAFB; /* Slightly lighter row for readability */
+        }
+        .leading-tag {
+            background-color: #2CA58D; /* Teal */
+            color: #FFFFFF;
+            padding: 4px 8px;
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .coincident-tag {
+            background-color: #3B82F6; /* Blue */
+            color: #FFFFFF;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .lagging-tag {
+            background-color: #D9534F; /* Red */
+            color: #FFFFFF;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .positive-deviation {
+            color: #2CA58D; /* Teal */
+            font-weight: 600;
+        }
+        .negative-deviation {
+            color: #D9534F; /* Red */
+            font-weight: 600;
+        }
+        /* New classes for data coloring based on image */
+        .data-red {
+            color: #FFFFFF; /* White text for better contrast on colored background */
+            background-color: #D9534F; /* Red from image */
+            font-weight: 600;
+        }
+        .data-blue {
+            color: #FFFFFF; /* White text for better contrast on colored background */
+            background-color: #3B82F6; /* Blue from image */
+            font-weight: 600;
+        }
+        .data-neutral { /* For values that are gray in the image */
+            background-color: #E0E0E0; /* Light Gray from image */
+            color: #0A2342; /* Dark Blue text */
+            font-weight: 600;
+        }
+        /* Ensure sticky left column background adjusts for colored cells */
+        .sticky-cell-bg {
+            background-color: #FFFFFF; /* Default white background for sticky cells */
+        }
+        tr:nth-child(even) .sticky-cell-bg {
+            background-color: #F9FAFB; /* Match even row background */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="container mx-auto bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6 text-[#0A2342]">Recolección de Datos Macroeconómicos</h1>
+        <p class="text-center text-lg text-gray-600 mb-8">Monitoreo de indicadores clave para anticipar la salud económica y el PIB.</p>
+
+        <div class="mb-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <label for="countrySelect" class="text-lg font-semibold text-[#0A2342]">Seleccionar Economía:</label>
+            <select id="countrySelect" class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent">
+                <option value="canada">Canadá</option>
+                <option value="switzerland">Suiza</option>
+                <option value="japan">Japón</option>
+            </select>
+        </div>
+
+        <!-- Nueva sección: Situación Actual del País -->
+        <div id="currentSituationSection" class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-[#0A2342]">Situación Actual de <span id="currentCountryName">Canadá</span></h2>
+            <p id="currentSituationText" class="text-gray-700 leading-relaxed">
+                <!-- Contenido dinámico aquí -->
+            </p>
+        </div>
+
+        <!-- Nueva sección: Riesgos de Recesión y Posibilidades de Crecimiento -->
+        <div id="recessionRisksGrowthPotentialSection" class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-[#0A2342]">Riesgos de Recesión y Posibilidades de Crecimiento en <span id="recessionCountryName">Canadá</span></h2>
+            <p id="recessionRisksGrowthPotentialText" class="text-gray-700 leading-relaxed">
+                <!-- Contenido dinámico aquí -->
+            </p>
+        </div>
+
+        <div class="table-container rounded-lg border border-gray-200">
+            <table class="w-full text-sm text-gray-700">
+                <thead>
+                    <tr>
+                        <th class="sticky left-0 bg-[#0A2342]">Indicador</th>
+                        <th class="sticky left-0 bg-[#0A2342]">Clasificación</th>
+                        <th>Último Dato</th>
+                        <th>Consenso</th>
+                        <th>Dato Anterior</th>
+                        <th>Desviación</th>
+                        <th>Interpretación</th>
+                    </tr>
+                </thead>
+                <tbody id="macroDataBody">
+                    <!-- Data will be loaded here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Nueva sección: Conclusión por Economía -->
+        <div id="conclusionSection" class="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-[#0A2342]">Conclusión para <span id="conclusionCountryName">Canadá</span></h2>
+            <p id="conclusionText" class="text-gray-700 leading-relaxed">
+                <!-- Contenido dinámico aquí -->
+            </p>
+        </div>
+
+        <div class="mt-8 text-center text-gray-700">
+            <p><strong>Analista:</strong> Luis Riofrio</p>
+            <p><strong>Fecha de Realización:</strong> 30 de junio de 2025</p>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-8 text-center">
+            *MoM: Month-over-Month (Mes a Mes). Los datos presentados son **ficticios y solo para fines ilustrativos**, no provienen de una fuente de datos en tiempo real. Para datos reales y actualizados, se recomienda consultar calendarios económicos de Investing.com, FXStreet, Bloomberg, o los reportes oficiales de las oficinas de estadística de cada país.
+        </p>
+    </div>
+
+    <script>
+        // Data for each country
+        const macroData = {
+            canada: {
+                name: "Canadá",
+                currentSituation: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Resumen ejecutivo – Economía canadiense (corte 30 jun 2025)</h4>
+                    La economía canadiense se prevé un retroceso modesto en el 2T-25 por caída de exportaciones y debilidad doméstica. Se observa una desaceleración en el mercado laboral con pérdida de 55 mil empleos manufactureros en 4 meses y aumento de desempleo impulsado por el reingreso de inactivos, especialmente en Ontario y BC. La inflación subyacente aún se mantiene alta.
+                    <br><br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Rendimiento reciente de los mercados</h4>
+                    <p><strong>Renta variable canadiense:</strong> desempeño rezagado frente a EE. UU., coherente con menor crecimiento interno.</p>
+                    <p><strong>Divisas:</strong> la fortaleza del CAD obedece más a la debilidad general del USD que a fundamentos locales; volatilidad limitada mientras el mercado aguarda acuerdos comerciales.</p>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Desempeño sectorial</h4>
+                    <ul>
+                        <li><strong>Energía:</strong> Reapertura de oleoducto impulsó exportaciones de crudo en mayo; precios más bajos limitaron el efecto neto, pero el sector mantiene flujos de capital positivos.</li>
+                        <li><strong>Manufacturas:</strong> Mayor impacto de los aranceles estadounidenses; empleo –55 k en cuatro meses y capacidad ociosa creciente.</li>
+                        <li><strong>Servicios:</strong> Consumo moderado; alta creación de empleo en salud y educación, compensando parte de la caída manufacturera.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Tendencias macroeconómicas</h4>
+                    <p>La deuda de los hogares sigue elevada, presionando el gasto y forzando a muchos hogares a buscar un segundo ingreso.</p>
+                    <p>Aranceles bilaterales continúan distorsionando la demanda externa; se espera progreso en negociaciones USMCA hacia finales de 2025, lo que favorecería exportaciones y confianza empresarial.</p>
+                `,
+                recessionRisksGrowthPotential: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Riesgos e Incertidumbres:</h4>
+                    <ul>
+                        <li>Persistencia de aranceles o escalada comercial que prolongue la contracción exportadora.</li>
+                        <li>Debilidad laboral más profunda que erosione ingresos y consumo interno.</li>
+                        <li>Deuda de los hogares: sensibilidad elevada a tasas hipotecarias todavía altas.</li>
+                        <li>Choques exógenos en precios de energía que afecten tanto inflación como balanza comercial.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Proyecciones Clave:</h4>
+                    <ul>
+                        <li>Reaceleración ligera en 4T-25 si se levantan aranceles sobre autos y metales y mejora la demanda externa.</li>
+                        <li>Riesgo de ampliación de la debilidad laboral si la demanda interna sigue lenta.</li>
+                        <li>CIBC espera dos recortes de 25 pb hasta 2,25 % antes de fin de año, condicionados a cifras débiles de empleo e IPC de junio.</li>
+                        <li>Déficit de balanza comercial seguirá lastrando el PIB en 3T-25 mientras persistan aranceles sectoriales.</li>
+                        <li>Gradual apreciación del CAD hacia 1,34 a finales de 2026 (gráfica abajo).</li>
+                        <li>Recuperación gradual de la actividad desde 4T-25 apoyada en: i) retirada parcial de aranceles, ii) mejora de términos de intercambio (energía-metales) y iii) política monetaria más laxa.</li>
+                        <li>USD/CAD inclinado a la baja (véase gráfico), pero con soporte en 1,35 mientras persista la incertidumbre comercial.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Oportunidades de inversión (no recomendaciones)</h4>
+                    <ul>
+                        <li><strong>Bonos provinciales a 5-7 años:</strong> Espacio para compresión de diferenciales tras recortes del BoC.</li>
+                        <li><strong>Empresas de mid-stream energético:</strong> Volumen de exportación en recuperación y decap-ex estable tras la reapertura de oleoductos.</li>
+                        <li><strong>Sector tecnología aplicada a eficiencia industrial:</strong> Incentivos fiscales y necesidad de reducir costos en manufacturas afectadas por aranceles.</li>
+                    </ul>
+                `,
+                conclusion: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Conclusiones estratégicas:</h4>
+                    El panorama de corto plazo sigue ensombrecido por la debilidad del mercado laboral y el lastre comercial; sin embargo, la probabilidad de recortes adicionales del BoC y la eventual relajación arancelaria crean un sesgo positivo a 12-18 meses.
+                    Los inversores deberían vigilar indicadores de empleo de alta frecuencia y la evolución de las negociaciones USMCA como catalizadores clave.
+                    Sectores defensivos con exposición doméstica limitada y emisores de alta calidad crediticia pueden ofrecer resiliencia mientras se materializa la recuperación.
+                    <br><br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Visualización destacada:</h4>
+                                        (gráfico generado a partir de datos del FX Monthly de CIBC)
+                `,
+                indicators: [
+                    { indicator: 'Crecimiento del PIB', classification: 'Coincidente', last: '-0.10%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Caída de exportaciones y debilidad doméstica.' },
+                    { indicator: 'PMI Manufacturero', classification: 'Adelantado', last: '46.10', prev: '-', consensus: '-', deviation: '-', interpretation: 'Mayor impacto de los aranceles estadounidenses.' },
+                    { indicator: 'PMI de Servicios', classification: 'Adelantado', last: '45.60', prev: '-', consensus: '-', deviation: '-', interpretation: 'Consumo moderado; alta creación de empleo en salud y educación.' },
+                    { indicator: 'Ventas Minoristas', classification: 'Coincidente', last: '-1.10%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Presión por deuda de hogares.' },
+                    { indicator: 'Inflación', classification: 'Rezagado', last: '1.70%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Presiones inflacionarias persistentes.' },
+                    { indicator: 'Tasa de Desempleo', classification: 'Rezagado', last: '7.00%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Desaceleración laboral, reingreso de inactivos.' },
+                    { indicator: 'Tasa de Interés', classification: 'Adelantado', last: '2.75%', prev: '-', consensus: '-', deviation: '-', interpretation: 'BoC en 2,75%, se esperan recortes condicionados.' }
+                ]
+            },
+            switzerland: {
+                name: "Suiza",
+                currentSituation: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Resumen Ejecutivo – Economía de Suiza (corte: 30 jun 2025)</h4>
+                    La economía suiza mantiene su perfil de mercado-refugio, pero afronta un escenario de menor dinamismo cíclico y presiones desinflacionarias que han llevado al Banco Nacional Suizo (BNS) a volver a la tasa cero y a insinuar la posibilidad de tipos negativos si la inflación continúa por debajo de objetivo.
+                    <br><br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Rendimiento reciente del mercado</h4>
+                    <p><strong>Activo SMI:</strong> 11 880 pts. Perspectiva casas de análisis: 12 200 (-dic-25). Comentario: Lateral, defensivo por alta ponderación de salud y consumo global.</p>
+                    <p><strong>Activo USD/CHF:</strong> 0,81 (27-jun). Perspectiva casas de análisis: 0,82 (-dic-25) / 0,79 (-jun-26). Comentario: Depreciación gradual del franco frente al USD.</p>
+                    <p><strong>Activo EUR/CHF:</strong> 0,94. Perspectiva casas de análisis: 0,95 (Q3-25) / 0,96 (Q4-25). Comentario: Proyección alcista apoyada en política más laxa del BNS.</p>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Desempeño sectorial y de activos</h4>
+                    <ul>
+                        <li><strong>Acciones:</strong> Sesgo defensivo (salud, alimentos y bienes de lujo) sostiene la resiliencia relativa del SMI, pero limita el potencial alcista frente a otros índices europeos.</li>
+                        <li><strong>Divisas:</strong> El franco mantiene demanda como refugio, aunque la relajación monetaria favorece cierta depreciación gradual contra el euro y el dólar.</li>
+                        <li><strong>Bonos:</strong> Rendimientos negativos reales persisten; la curva Eidg. 10 a en torno a 0,37 % con previsión de 0,50 % a final de 2025.</li>
+                        <li><strong>Commodities:</strong> Oro permanece en las carteras suizas como cobertura clave (UBS mantiene objetivo 3 500 USD/oz).</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Tendencias macroeconómicas</h4>
+                    <ul>
+                        <li><strong>PIB real:</strong> Se modera de 1,4 % en 2024E a 0,9 % en 2025E, con repunte a 1,4 % en 2026E.</li>
+                        <li><strong>Inflación (IPC promedio):</strong> 1,1 % → 0,2 % → 0,5 % (2024-26), evidenciando riesgos deflacionarios.</li>
+                        <li><strong>Mercado laboral:</strong> Desempleo ajustado en 2,9 %, uno de los más bajos de la OCDE.</li>
+                        <li><strong>Actividad:</strong> PMI manufacturero sigue en contracción (42,1), señalando debilidad industrial.</li>
+                    </ul>
+                    <p><strong>Visualización:</strong> Evolución prevista del PIB (véase gráfico).</p>
+                    <p>(Gráfico generado a partir de proyecciones UBS – ver barra “Suiza – proyección de crecimiento del PIB” arriba.)</p>
+                `,
+                recessionRisksGrowthPotential: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Política monetaria y fiscal</h4>
+                    <ul>
+                        <li>El BNS recortó 25 pb a 0 % y mantiene el sesgo a nuevas reducciones; CIBC anticipa retorno a tipos negativos (-0,25 %) en los próximos trimestros si la inflación se mantiene por debajo de las revisiones objetivo.</li>
+                        <li>La autoridad sigue dispuesta a intervenir en el mercado FX, aunque busca minimizar compras de divisa tras volver a la lista de vigilancia del Tesoro de EE. UU.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Proyecciones clave (consensos UBS/CIBC)</h4>
+                    <ul>
+                        <li><strong>Variable: PIB real:</strong> 2025E: 0,9 %, 2026E: 1,4 %. Dirección: Moderada aceleración.</li>
+                        <li><strong>Variable: IPC prom.:</strong> 2025E: 0,2 %, 2026E: 0,5 %. Dirección: Riesgo deflación, pero repunte leve.</li>
+                        <li><strong>Variable: SNB policy rate:</strong> Q4-25: -0,25 %. Dirección: Política expansiva.</li>
+                        <li><strong>Variable: EUR/CHF:</strong> 2025E: 0,96, 2026E: 0,99. Dirección: Suave depreciación CHF.</li>
+                        <li><strong>Variable: USD/CHF:</strong> 2025E: 0,82, 2026E: 0,82. Dirección: Estable / ligera debilidad CHF.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Riesgos e incertidumbres</h4>
+                    <ul>
+                        <li>Deflación prolongada que obligue a profundizar en tipos negativos y reactivar intervenciones FX.</li>
+                        <li>Apreciación súbita del franco ante shocks geopolíticos, presionando exportaciones (relojería, farmacéuticas).</li>
+                        <li>Dependencia del ciclo europeo: estancamiento en la Eurozona pesaría sobre la demanda externa.</li>
+                        <li>Tensiones comerciales globales – escalada arancelaria de EE. UU. podría generar vuelo a calidad hacia CHF y distorsionar competitividad suiza.</li>
+                    </ul>
+                `,
+                conclusion: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Oportunidades de inversión</h4>
+                    <ul>
+                        <li><strong>Bonos corporativos suizos IG:</strong> diferencial atractivo frente a Eidgenossen en entorno de tasas bajas.</li>
+                        <li><strong>Exportadoras defensivas (salud y consumo premium):</strong> se benefician de la depreciación gradual del CHF.</li>
+                        <li><strong>Estrategias long EUR/CHF (carry + tendencia):</strong> con stops 0,926, sugeridas por UBS.</li>
+                        <li><strong>Oro:</strong> como cobertura ante eventuales episodios de riesgo global, soportado por tasas reales negativas.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Conclusiones estratégicas</h4>
+                    La combinación de crecimiento modesto, inflación muy contenida y política monetaria ultra-acomodaticia consolida a Suiza como mercado defensivo. Las valuaciones premium de sus blue chips y la probabilidad de un franco algo más débil sugieren posicionamientos selectivos en renta variable globalmente diversificada y renta fija en francos de mayor rendimiento. Mantener coberturas contra shocks externos (oro, opciones EUR/CHF) resulta prudente mientras persistan las tensiones comerciales y el riesgo de deflación.
+                `,
+                indicators: [
+                    { indicator: 'Crecimiento del PIB', classification: 'Coincidente', last: '0.50%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Menor dinamismo cíclico.' },
+                    { indicator: 'PMI Manufacturero', classification: 'Adelantado', last: '42.10', prev: '-', consensus: '-', deviation: '-', interpretation: 'Contracción, señalando debilidad industrial.' },
+                    { indicator: 'PMI de Servicios', classification: 'Adelantado', last: '56.30', prev: '-', consensus: '-', deviation: '-', interpretation: 'N/A' },
+                    { indicator: 'Ventas Minoristas', classification: 'Coincidente', last: '-0.30%', prev: '-', consensus: '-', deviation: '-', interpretation: 'N/A' },
+                    { indicator: 'Inflación', classification: 'Rezagado', last: '-0.10%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Evidenciando riesgos deflacionarios.' },
+                    { indicator: 'Tasa de Desempleo', classification: 'Rezagado', last: '2.80%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Ajustado, uno de los más bajos de la OCDE.' },
+                    { indicator: 'Tasa de Interés', classification: 'Adelantado', last: '0.00%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Retorno a tasa cero, posible tipos negativos.' }
+                ]
+            },
+            japan: {
+                name: "Japón",
+                currentSituation: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Resumen ejecutivo - Economía de Japón (corte: 30 jun 2025)</h4>
+                    La recuperación japonesa continúa, aunque con señales mixtas entre la dinámica macro y los mercados financieros. El TOPIX cotiza en ≈ 2 840 puntos y el Nikkei 225 ronda los 40 000, sustentados por fuertes flujos extranjeros y expectativas de utilidades estables, pero con valuaciones exigentes.
+                    <br><br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Rendimiento reciente del mercado</h4>
+                    <p><strong>Rentabilidad:</strong> En el último mes el TOPIX avanzó 2,6 % y el Nikkei 6,4 %. Los segmentos growth superaron a value; el índice TOPIX Growth ganó 5 % vs. 1,5 % en Value.</p>
+                    <p><strong>Utilidades:</strong> Goldman Sachs proyecta crecimiento de EPS TOPIX de +10 % FY24, +2 % FY25 y +7 % FY26, bajo supuestos USD/JPY 150/145/145.</p>
+                    <p><strong>Factores de momentum:</strong> La reciente “rally de momentum” se explica por (i) catalizadores estructurales como la adopción de IA, (ii) preferencia por empresas con visibilidad de ganancias y (iii) factores estacionales (baja de tasas USA en jul-ago).</p>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Desempeño sectorial</h4>
+                    <p>Goldman Sachs mantiene sobre-ponderación en Maquinaria, Retail, IT-Services y Electrical Equipment; sub-ponderación en Acero, Energía y Autos.</p>
+                    <p>Los sectores con mayores retornos YTD incluyen Defensa, AI/semiconductores (Factory Automation) y Gaming, todos con +80-130 % acumulado.</p>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Tendencias macroeconómicas</h4>
+                    <ul>
+                        <li><strong>PIB real:</strong> +1,4 % a/a (1T-25). Crecimiento moderado, impulsado por gasto privado.</li>
+                        <li><strong>Tokio CPI núcleo:</strong> 3,1 % a/a jun-25 (-0,5 pp). Desaceleración por rebaja transitoria en tarifas de agua y menores precios de energía.</li>
+                        <li><strong>Ventas minoristas:</strong> +2,2 % a/a may-25; -0,2 % m/m. Enfriamiento tras fuerte abril, debilidad en autos y combustibles.</li>
+                        <li><strong>Producción industrial:</strong> +3,5 % m/m may-25 (estim.). Recuperación parcial tras -1,1 % en abril; por debajo del plan METI.</li>
+                        <li><strong>Tankan (jun-25, grandes manufacturers):</strong> +10 vs. +12 mar-25. Segundo descenso trimestral; sensibles a aranceles USA.</li>
+                    </ul>
+                `,
+                recessionRisksGrowthPotential: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Políticas monetarias y fiscales</h4>
+                    <ul>
+                        <li><strong>Banco de Japón (BoJ):</strong> Sin alzas en el horizonte inmediato. El enfoque está en salarios y expectativas de inflación; se observa salida gradual del control de rendimiento pero sin endurecimiento prematuro.</li>
+                        <li><strong>Yen:</strong> CIBC revisó su proyección de USD/JPY a 140 para 3T-25 (desde 137), anticipando apreciación gradual conforme el dólar se debilite.</li>
+                        <li><strong>Fiscal:</strong> El anuncio de elecciones a la Cámara Alta (20 jul) podría influir en planes de estímulo; se vigila la capacidad de la coalición gobernante para retener mayoría.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Proyecciones clave</h4>
+                    <ul>
+                        <li><strong>Fuente: GS / Variable: TOPIX:</strong> 3 meses: 2 775, 6 meses: 2 800, 12 meses: 2 900.</li>
+                        <li><strong>Fuente: GS / Variable: Capex corporativo FY25:</strong> +9 % (revisión jun).</li>
+                        <li><strong>Fuente: CIBC / Variable: USD/JPY:</strong> 3 meses: 140, 6 meses: 137, 12 meses: 135-134.</li>
+                    </ul>
+                    <br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Riesgos e incertidumbres</h4>
+                    <ul>
+                        <li>Corrección de momentum si los resultados 1Q FY25 decepcionan o mejora la visibilidad global, provocando rotación hacia value.</li>
+                        <li>Aranceles y negociaciones comerciales USA-Asia, con potencial impacto en sentimiento exportador.</li>
+                        <li>Sobre-valoración relativa: P/Es en zona +0,3 σ sobre promedio de 10 años.</li>
+                        <li>Política doméstica: Elecciones y discusiones sobre alza tributaria para financiar defensa y envejecimiento poblacional.</li>
+                    </ul>
+                `,
+                conclusion: `
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Conclusiones estratégicas</h4>
+                    Oportunidades selectivas: exposiciones a IA-hardware, defensa y servicios digitales presentan crecimiento secular resistente al ciclo.
+                    Acciones defensivas de calidad (beta < 0,7, ROE > 8 %) continúan captando flujos foráneos; ver lista de BofA para ideas de “quality cyclicals”.
+                    Cobertura FX: dada la senda de apreciación gradual del yen, estrategias de cobertura parcial para portafolios en USD pueden preservar retornos.
+                    Vigilancia de datos: Tankan de septiembre, inflación subyacente y resultados corporativos 1Q serán decisivos para validar las valoraciones actuales.
+                    <br><br>
+                    <h4 class="font-bold text-lg mb-2 text-[#0A2342]">Visualización destacada:</h4>
+                                        (gráfico generado a partir de datos del FX Monthly de CIBC)
+                `,
+                indicators: [
+                    { indicator: 'Crecimiento del PIB', classification: 'Coincidente', last: '0.00%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Crecimiento moderado, impulsado por gasto privado.' },
+                    { indicator: 'PMI Manufacturero', classification: 'Adelantado', last: '50.40', prev: '-', consensus: '-', deviation: '-', interpretation: 'Goldman Sachs mantiene sobre-ponderación en Maquinaria, IT-Services y Electrical Equipment.' },
+                    { indicator: 'PMI de Servicios', classification: 'Adelantado', last: '51.50', prev: '-', consensus: '-', deviation: '-', interpretation: 'Goldman Sachs mantiene sobre-ponderación en Retail y IT-Services.' },
+                    { indicator: 'Ventas Minoristas', classification: 'Coincidente', last: '-0.20%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Enfriamiento tras fuerte abril, debilidad en autos y combustibles.' },
+                    { indicator: 'Inflación', classification: 'Rezagado', last: '3.50%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Desaceleración por rebaja transitoria en tarifas de agua y menores precios de energía.' },
+                    { indicator: 'Tasa de Desempleo', classification: 'Rezagado', last: '2.50%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Mercado laboral ajustado con ligera mejora.' },
+                    { indicator: 'Tasa de Interés', classification: 'Adelantado', last: '0.50%', prev: '-', consensus: '-', deviation: '-', interpretation: 'Política monetaria ultra-laxa sin cambios.' }
+                ]
+            }
+        };
+
+        // Helper function to get the color class for 'Último Dato' based on the image
+        function getDataColorClass(countryKey, indicator, lastValue) {
+            if (countryKey === 'canada') {
+                if (indicator === 'Crecimiento del PIB' && lastValue === '-0.10%') return 'data-red';
+                if (indicator === 'PMI Manufacturero' && lastValue === '46.10') return 'data-blue';
+                if (indicator === 'PMI de Servicios' && lastValue === '45.60') return 'data-blue';
+                if (indicator === 'Ventas Minoristas' && lastValue === '-1.10%') return 'data-red';
+                if (indicator === 'Inflación' && lastValue === '1.70%') return 'data-neutral';
+                if (indicator === 'Tasa de Desempleo' && lastValue === '7.00%') return 'data-neutral';
+                if (indicator === 'Tasa de Interés' && lastValue === '2.75%') return 'data-neutral';
+            } else if (countryKey === 'switzerland') {
+                if (indicator === 'Crecimiento del PIB' && lastValue === '0.50%') return 'data-blue';
+                if (indicator === 'PMI Manufacturero' && lastValue === '42.10') return 'data-red';
+                if (indicator === 'PMI de Servicios' && lastValue === '56.30') return 'data-blue';
+                if (indicator === 'Ventas Minoristas' && lastValue === '-0.30%') return 'data-red';
+                if (indicator === 'Inflación' && lastValue === '-0.10%') return 'data-neutral';
+                if (indicator === 'Tasa de Desempleo' && lastValue === '2.80%') return 'data-blue';
+                if (indicator === 'Tasa de Interés' && lastValue === '0.00%') return 'data-neutral';
+            } else if (countryKey === 'japan') {
+                if (indicator === 'Crecimiento del PIB' && lastValue === '0.00%') return 'data-neutral';
+                if (indicator === 'PMI Manufacturero' && lastValue === '50.40') return 'data-blue';
+                if (indicator === 'PMI de Servicios' && lastValue === '51.50') return 'data-blue';
+                if (indicator === 'Ventas Minoristas' && lastValue === '-0.20%') return 'data-red';
+                if (indicator === 'Inflación' && lastValue === '3.50%') return 'data-red';
+                if (indicator === 'Tasa de Desempleo' && lastValue === '2.50%') return 'data-blue';
+                if (indicator === 'Tasa de Interés' && lastValue === '0.50%') return 'data-neutral';
+            }
+            return ''; // Default if no specific color is defined (shouldn't happen with full coverage)
+        }
+
+        function renderTable(countryKey) {
+            const countryData = macroData[countryKey];
+            if (!countryData) return; // Safeguard
+
+            // Update country names in titles
+            document.getElementById('currentCountryName').textContent = countryData.name;
+            document.getElementById('recessionCountryName').textContent = countryData.name;
+            document.getElementById('conclusionCountryName').textContent = countryData.name;
+
+            // Update dynamic text sections
+            document.getElementById('currentSituationText').innerHTML = countryData.currentSituation;
+            document.getElementById('recessionRisksGrowthPotentialText').innerHTML = countryData.recessionRisksGrowthPotential;
+            document.getElementById('conclusionText').innerHTML = countryData.conclusion;
+
+            // Render the indicators table
+            const tbody = document.getElementById('macroDataBody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            countryData.indicators.forEach(item => {
+                const row = document.createElement('tr');
+                const deviationClass = item.deviation.startsWith('+') ? 'positive-deviation' : (item.deviation.startsWith('-') ? 'negative-deviation' : '');
+                const classificationTagClass = item.classification === 'Adelantado' ? 'leading-tag' : (item.classification === 'Coincidente' ? 'coincident-tag' : 'lagging-tag');
+                
+                // Determine the color class for 'Último Dato' based on the image
+                const lastDataColorClass = getDataColorClass(countryKey, item.indicator, item.last);
+
+                row.innerHTML = `
+                    <td class="sticky left-0 sticky-cell-bg">${item.indicator}</td>
+                    <td><span class="${classificationTagClass}">${item.classification}</span></td>
+                    <td class="${lastDataColorClass}">${item.last}</td>
+                    <td>${item.consensus}</td> <!-- Moved Consenso here -->
+                    <td>${item.prev}</td>     <!-- Moved Dato Anterior here -->
+                    <td class="${deviationClass}">${item.deviation}</td>
+                    <td>${item.interpretation}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Event listener for dropdown change
+        document.getElementById('countrySelect').addEventListener('change', function() {
+            renderTable(this.value);
+        });
+
+        // Initial render for Canada when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable('canada');
+        });
+    </script>
+</body>
+</html>
